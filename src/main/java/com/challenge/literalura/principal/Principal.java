@@ -6,10 +6,7 @@ import com.challenge.literalura.service.ConsumoAPI;
 import com.challenge.literalura.service.ConvierteDatos;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Principal {
@@ -55,8 +52,9 @@ public class Principal {
                 case 3:
                     ListarAutoresRegistrados();
                     break;
-//                case 4:
-//                    ListarAutoresVivosAnio();
+                case 4:
+                    ListarAutoresVivosAnio();
+                        break;
 //                case 5:
 //                    ListarLibrosPorIdioma();
 //                case 0:
@@ -193,5 +191,30 @@ public class Principal {
             System.out.println("-------------------------------");
         });
         System.out.println("=========================================\n");
+    }
+
+    private void ListarAutoresVivosAnio(){
+        System.out.println("Ingresa un año para el que quieras conocer autores registrados y vivos ese año");
+
+        try{
+            Integer anioAutoresVivos = datoTeclado.nextInt();
+            List<Autor> autoresVivos = autorRepositorio.findAutoresVivosEnAnio(anioAutoresVivos);
+
+            if(autoresVivos.isEmpty()){
+                System.out.println("\nNo se encontraron autores vivos registrados en el año " + anioAutoresVivos + ".");
+            } else{
+                System.out.println("\nAutores vivos en el año " + anioAutoresVivos + ":");
+                autoresVivos.forEach(autor -> {
+                    System.out.println("________________________________________");
+                    System.out.println("Autor: " + autor.getNombre());
+                    System.out.println("Fecha de Nacimiento: " + autor.getAnio_nacimiento());
+                    System.out.println("Fecha de Fallecimiento: " + (autor.getAnio_fallecimiento() != null ? autor.getAnio_fallecimiento() : "Aún con vida!"));
+                });
+                System.out.println("________________________________________");
+            }
+        }catch (InputMismatchException e){
+            System.out.println("\nError: Por favor ingresar un año válido (ej: 1950).");
+            datoTeclado.nextLine(); //Limpia el año inválido ingresado previamente.
+        }
     }
 }
