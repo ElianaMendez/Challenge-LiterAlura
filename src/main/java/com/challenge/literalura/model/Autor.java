@@ -12,8 +12,8 @@ public class Autor {
     private Long id;
     @Column(unique = true)
     private String nombre;
-    private int anio_nacimiento;
-    private int anio_fallecimiento;
+    private Integer anio_nacimiento;
+    private Integer anio_fallecimiento;
     @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Libro> libros;
 
@@ -56,17 +56,27 @@ public class Autor {
         this.nombre = nombre;
     }
 
-    public int getAnio_nacimiento() {
+    public Integer getAnio_nacimiento() {
         return anio_nacimiento;
+    }
+
+    public void setAnio_nacimiento(Integer anio_nacimiento) {
+        this.anio_nacimiento = anio_nacimiento;
+    }
+
+    public Integer getAnio_fallecimiento() {
+        return anio_fallecimiento;
+    }
+
+    public void setAnio_fallecimiento(Integer anio_fallecimiento) {
+        this.anio_fallecimiento = anio_fallecimiento;
     }
 
     public void setAnio_nacimiento(int anio_nacimiento) {
         this.anio_nacimiento = anio_nacimiento;
     }
 
-    public int getAnio_fallecimiento() {
-        return anio_fallecimiento;
-    }
+
 
     public void setAnio_fallecimiento(int anio_fallecimiento) {
         this.anio_fallecimiento = anio_fallecimiento;

@@ -4,10 +4,13 @@ import com.challenge.literalura.repository.AutorRepository;
 import com.challenge.literalura.repository.BookRepository;
 import com.challenge.literalura.service.ConsumoAPI;
 import com.challenge.literalura.service.ConvierteDatos;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     private Scanner datoTeclado = new Scanner(System.in);
@@ -46,12 +49,12 @@ public class Principal {
                 case 1:
                     BuscarLibroPorTitulo();
                     break;
-//                case 2:
-//                    ListarLibrosRegistrados();
-//                    break;
-//                case 3:
-//                    ListarAutoresRegistrados();
-//                    break;
+                case 2:
+                    ListarLibrosRegistrados();
+                    break;
+                case 3:
+                    ListarAutoresRegistrados();
+                    break;
 //                case 4:
 //                    ListarAutoresVivosAnio();
 //                case 5:
@@ -83,8 +86,6 @@ public class Principal {
                 .findFirst();
         return primerLibro;
 
-//        DatosLibros datosLibros = conversor.obtenerDatos(json, DatosLibros.class);
-//        return datosLibros;
     }
 
     private void BuscarLibroPorTitulo() {
@@ -143,5 +144,54 @@ public class Principal {
         } else {
             System.out.println("\nNo se encontró ningún libro con ese título.\n");
         }
+    }
+
+    private void ListarLibrosRegistrados() {
+        List<Libro> libros = libroRepositorio.findAllWithAuthor();
+
+        if (libros.isEmpty()) {
+            System.out.println("\nNo hay libros registrados en la base de datos.\n");
+            return;
+        }
+
+        System.out.println("\n========== LIBROS REGISTRADOS ==========");
+        libros.forEach(libro -> {
+            System.out.println("\nTítulo: " + libro.getTitulo());
+            System.out.println("Autor: " + (libro.getAutor() != null ? libro.getAutor().getNombre() : "No disponible"));
+            System.out.println("Idioma: " + (libro.getIdioma() != null ? libro.getIdioma() : "No disponible"));
+            System.out.println("Descargas: " + (libro.getNumeroDescargas() != null ? libro.getNumeroDescargas() : "0"));
+            System.out.println("-------------------------------");
+        });
+        System.out.println("=========================================\n");
+    }
+
+    private void ListarAutoresRegistrados() {
+        List<Autor> autores = autorRepositorio.findAll();
+
+        if (autores.isEmpty()) {
+            System.out.println("\nNo hay autores registrados en la base de datos.\n");
+            return;
+        }
+
+        System.out.println("\n========== AUTORES REGISTRADOS ==========");
+        autores.forEach(autor -> {
+            System.out.println("\nNombre: " + autor.getNombre());
+            System.out.println("Año de Nacimiento: " + (autor.getAnio_nacimiento() != null ? autor.getAnio_nacimiento() : "No disponible"));
+            System.out.println("Año de Fallecimiento: " + (autor.getAnio_fallecimiento() != null ? autor.getAnio_fallecimiento() : "No disponible"));
+
+            String librosEscritos;
+            if (autor.getLibros() != null && !autor.getLibros().isEmpty()) {
+                // Use stream() to map each book to its title and join them into a single string
+                librosEscritos = autor.getLibros().stream()
+                        .map(Libro::getTitulo)
+                        .collect(Collectors.joining(", "));
+            } else {
+                librosEscritos = "No tiene libros registrados.";
+            }
+
+            System.out.println("Libros: " + librosEscritos);
+            System.out.println("-------------------------------");
+        });
+        System.out.println("=========================================\n");
     }
 }
