@@ -55,8 +55,9 @@ public class Principal {
                 case 4:
                     ListarAutoresVivosAnio();
                         break;
-//                case 5:
-//                    ListarLibrosPorIdioma();
+                case 5:
+                    ListarLibrosPorIdioma();
+                        break;
 //                case 0:
 //                    System.out.println("Cerrando la aplicación...");
 //                    break;
@@ -155,7 +156,7 @@ public class Principal {
         System.out.println("\n========== LIBROS REGISTRADOS ==========");
         libros.forEach(libro -> {
             System.out.println("\nTítulo: " + libro.getTitulo());
-            System.out.println("Autor: " + (libro.getAutor() != null ? libro.getAutor().getNombre() : "No disponible"));
+            System.out.println("Autor: " + (libro.getAutor() != null ? libro.getAutor().getNombre() : "Desconocido"));
             System.out.println("Idioma: " + (libro.getIdioma() != null ? libro.getIdioma() : "No disponible"));
             System.out.println("Descargas: " + (libro.getNumeroDescargas() != null ? libro.getNumeroDescargas() : "0"));
             System.out.println("-------------------------------");
@@ -197,7 +198,7 @@ public class Principal {
         System.out.println("Ingresa un año para el que quieras conocer autores registrados y vivos ese año");
 
         try{
-            Integer anioAutoresVivos = datoTeclado.nextInt();
+            Integer anioAutoresVivos = Integer.parseInt(datoTeclado.nextLine());
             List<Autor> autoresVivos = autorRepositorio.findAutoresVivosEnAnio(anioAutoresVivos);
 
             if(autoresVivos.isEmpty()){
@@ -216,5 +217,52 @@ public class Principal {
             System.out.println("\nError: Por favor ingresar un año válido (ej: 1950).");
             datoTeclado.nextLine(); //Limpia el año inválido ingresado previamente.
         }
+    }
+
+    private void ListarLibrosPorIdioma(){
+        System.out.println("""
+                Elige el idioma del cual quieres ver los libros
+                ______________________
+                es - Español
+                en - Inglés
+                fr - Francés
+                pt - Portugués
+                ______________________
+                """);
+        String idiomaElegido = datoTeclado.nextLine().toLowerCase().trim();
+
+        String nombreDeIdiomaCompleto;
+        switch (idiomaElegido){
+            case "es":
+                nombreDeIdiomaCompleto = "Español";
+                break;
+            case "en":
+                nombreDeIdiomaCompleto = "Inglés";
+                break;
+            case "fr":
+                nombreDeIdiomaCompleto = "Francés";
+                break;
+            case "pt":
+                nombreDeIdiomaCompleto = "Portugués";
+                break;
+            default:
+                System.out.println("Por favor eliga una opción válida");
+                return;
+        }
+
+        List<Libro> libros = libroRepositorio.findByIdiomaWithAutor(idiomaElegido);
+
+        if (libros.isEmpty()){
+            System.out.println("\nNo se encontraron libros en " + nombreDeIdiomaCompleto);
+            return;
+        }
+        System.out.println("\nLibros encontrados en " + nombreDeIdiomaCompleto + ":");
+        libros.forEach(libro -> {
+            System.out.println("\n-----------LIBRO------------");
+            System.out.println("Título: " + libro.getTitulo());
+            System.out.println("Autor: " + (libro.getAutor() != null ? libro.getAutor().getNombre() : "Desconocido"));
+            System.out.println("Descargas: " + (libro.getNumeroDescargas() != null ? libro.getNumeroDescargas() : "0"));
+        });
+        System.out.println("\n----------------------------");
     }
 }
