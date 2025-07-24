@@ -83,7 +83,11 @@ Elija la opción a través de su número:
 5 - Listar libros por idioma
 0 - Salir
 *******************************************
-
+```
 ## 💻 Demo de la Aplicación
 
-![Demo](Demo-LiterAlura.gif)
+![Demo](./Demo-LiterAlura.gif)
+
+## 👨‍💻 Autor
+
+**Eliana Méndez** 
