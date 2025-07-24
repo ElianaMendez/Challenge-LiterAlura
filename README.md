@@ -86,4 +86,4 @@ Elija la opción a través de su número:
 
 ## 💻 Demo de la Aplicación
 
-![Demo](demo.gif)
+![Demo](Demo-LiterAlura.gif)
