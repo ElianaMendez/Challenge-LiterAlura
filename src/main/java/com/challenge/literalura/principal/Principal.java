@@ -58,11 +58,11 @@ public class Principal {
                 case 5:
                     ListarLibrosPorIdioma();
                         break;
-//                case 0:
-//                    System.out.println("Cerrando la aplicación...");
-//                    break;
-//                default:
-//                    System.out.println("Opción inválida");
+                case 0:
+                    System.out.println("Cerrando la aplicación...");
+                    break;
+                default:
+                    System.out.println("Opción inválida");
            }
         }
     }
